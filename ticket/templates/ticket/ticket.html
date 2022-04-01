@@ -1,0 +1,82 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<div class="row" style="margin:10">
+    <div class="col-sm-4">
+        <div class="card-header">
+            TO DO
+          </div>
+          
+      {% for key,value in context.items %}
+
+      <!-- THIS CODE IS FOR  TO DO  -->
+      <form action="{% url 'move_to_inprogress' %}" method = "POST">
+        {% csrf_token %}
+          <div class="card">
+        <div class="card-body">
+          <input type="hidden"  name="task_name" class="card-title" value="{{key.task_name}}">Task : {{key.task_name}}</h5>
+          <input type="hidden" name="desc" class="card-text">description : {{key.description}}</p>
+          <input type="hidden" name="assign" class="card-text">Assignee name : {{value.name}}</p>
+          <input type="hidden" name="id" value="{{key.id}}">
+          <input type="hidden" name="user_id" value="{{value.id}}">
+          <input type="submit" class="btn btn-primary" placeholder="submit" value="Move to Inprogess">
+        </div>
+      </div>
+    </form>
+      {% endfor %}
+  
+    </div>
+    <div class="col-sm-4">
+        <div class="card-header">
+            IN PROGRESS
+          </div>
+            {% for key,value in context_inprogress.items %}
+      <!-- THIS CODE IS FOR IN-PROGRESS  -->
+
+            <form action="{% url 'move_to_done' %}" method = "POST">
+              {% csrf_token %}
+                <div class="card">
+              <div class="card-body">
+                <input type="hidden"  name="task_name" class="card-title" value="{{key.task_name}}">Task : {{key.task_name}}</h5>
+                <input type="hidden" name="desc" class="card-text">description : {{key.description}}</p>
+                <input type="hidden" name="assign" class="card-text">Assignee name : {{value.name}}</p>
+                <input type="hidden" name="id" value="{{key.id}}">
+                <input type="hidden" name="user_id" value="{{value.id}}">      
+                <input type="submit" class="btn btn-primary" placeholder="submit" value="Move to DONE">
+                <input type="submit" name="submit" class="btn btn-primary" placeholder="submit" value="Move to TO-DO">               
+              </div>
+            </div>
+          </form>
+            {% endfor %}    
+    </div>
+    <div class="col-sm-4">
+        <div class="card-header">
+            DONE
+          </div>
+          {% for key,value in done_task_list.items %}
+          <!-- THIS CODE IS FOR IN-PROGRESS  -->
+    
+                <form action="{% url 'move_to_inprogress'  %}" method = "POST">
+                  {% csrf_token %}
+                    <div class="card">
+                  <div class="card-body">
+                    <input type="hidden"  name="task_name" class="card-title" value="{{key.task_name}}">Task : {{key.task_name}}</h5>
+                    <input type="hidden" name="desc" class="card-text">description : {{key.description}}</p>
+                    <input type="hidden" name="assign" class="card-text">Assignee name : {{value.name}}</p>
+                    <input type="hidden" name="id" value="{{key.id}}">
+                    <input type="hidden" name="user_id" value="{{value.id}}">      
+                    <del><input type="submit" class="btn btn-primary" placeholder="submit" value="Move to DONE"></del> 
+                    <input type="submit" name = "submit" class="btn btn-primary" placeholder="submit" value="Move to Inprogess">
+                  </div>
+                </div>
+              </form>
+                {% endfor %}
+
+    </div>
+    
