@@ -23,8 +23,6 @@ def index(request):
 
 def move_to_inprogress(request):
     if request.method =="POST":
-
-        
         user_id = request.POST['user_id']
         user_object  = User.objects.get(id=user_id)
         if request.POST.get('submit') == "Move to Inprogess":

@@ -10,23 +10,28 @@
 <div class="row" style="margin:10">
     <div class="col-sm-4">
         <div class="card-header">
-            TO DO
-          </div>
-          
+          TO DO</div>   
       {% for key,value in context.items %}
-
       <!-- THIS CODE IS FOR  TO DO  -->
       <form action="{% url 'move_to_inprogress' %}" method = "POST">
         {% csrf_token %}
           <div class="card">
-        <div class="card-body">
-          <input type="hidden"  name="task_name" class="card-title" value="{{key.task_name}}">Task : {{key.task_name}}</h5>
-          <input type="hidden" name="desc" class="card-text">description : {{key.description}}</p>
-          <input type="hidden" name="assign" class="card-text">Assignee name : {{value.name}}</p>
+          <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+            <input type="hidden"  name="task_name" class="card-title" value="{{key.task_name}}"><strong>Task Name:</strong> {{key.task_name}}</h5><br></a>
+           <div class="collapse" id="collapseExample">
+            <div class="card-body">
+         
+          <input type="hidden" name="desc" class="card-text"><strong>Description :</strong>  {{key.description}}</p>
+          <input type="hidden" name="assign" class="card-text"><strong>Total-work-log :</strong> {{key.total_work_log}}</p>
+          <input type="hidden" name="assign" class="card-text"><strong>Description :</strong> {{value.name}}</p>
+          <input type="hidden" name="assign" class="card-text"><strong>Created-task-time :</strong> {{key.created_task_time}}</p>
+          <input type="hidden" name="assign" class="card-text"><strong>Assignee name :</strong> {{key.assignee_name}}</p>
+          <input type="hidden" name="assign" class="card-text"><strong>Priority :</strong> {{value.Priority}}</p>
           <input type="hidden" name="id" value="{{key.id}}">
           <input type="hidden" name="user_id" value="{{value.id}}">
           <input type="submit" class="btn btn-primary" placeholder="submit" value="Move to Inprogess">
         </div>
+      </div>
       </div>
     </form>
       {% endfor %}
@@ -42,16 +47,24 @@
             <form action="{% url 'move_to_done' %}" method = "POST">
               {% csrf_token %}
                 <div class="card">
-              <div class="card-body">
-                <input type="hidden"  name="task_name" class="card-title" value="{{key.task_name}}">Task : {{key.task_name}}</h5>
-                <input type="hidden" name="desc" class="card-text">description : {{key.description}}</p>
-                <input type="hidden" name="assign" class="card-text">Assignee name : {{value.name}}</p>
-                <input type="hidden" name="id" value="{{key.id}}">
-                <input type="hidden" name="user_id" value="{{value.id}}">      
+                  <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    <input type="hidden"  name="task_name" class="card-title" value="{{key.task_name}}">Task : {{key.task_name}}</h5>
+                  </a>
+                <div class="collapse" id="collapseExample1">
+                  <div class="card-body">
+                    <input type="hidden" name="desc" class="card-text"><strong>Description :</strong>  {{key.description}}</p>
+                    <input type="hidden" name="assign" class="card-text"><strong>Total-work-log :</strong> {{key.total_work_log}}</p>
+                    <input type="hidden" name="assign" class="card-text"><strong>Description :</strong> {{value.name}}</p>
+                    <input type="hidden" name="assign" class="card-text"><strong>Created-task-time :</strong> {{key.created_task_time}}</p>
+                    <input type="hidden" name="assign" class="card-text"><strong>Assignee name :</strong> {{key.assignee_name}}</p>
+                    <input type="hidden" name="assign" class="card-text"><strong>Priority :</strong> {{value.Priority}}</p>
+                    <input type="hidden" name="id" value="{{key.id}}">
+                    <input type="hidden" name="user_id" value="{{value.id}}">     
                 <input type="submit" class="btn btn-primary" placeholder="submit" value="Move to DONE">
                 <input type="submit" name="submit" class="btn btn-primary" placeholder="submit" value="Move to TO-DO">               
               </div>
             </div>
+          </div>
           </form>
             {% endfor %}    
     </div>
@@ -65,16 +78,24 @@
                 <form action="{% url 'move_to_inprogress'  %}" method = "POST">
                   {% csrf_token %}
                     <div class="card">
+                      <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        <input type="hidden"  name="task_name" class="card-title" value="{{key.task_name}}">Task : {{key.task_name}}</h5>
+                      </a>
+                    <div class="collapse" id="collapseExample1">
                   <div class="card-body">
-                    <input type="hidden"  name="task_name" class="card-title" value="{{key.task_name}}">Task : {{key.task_name}}</h5>
-                    <input type="hidden" name="desc" class="card-text">description : {{key.description}}</p>
-                    <input type="hidden" name="assign" class="card-text">Assignee name : {{value.name}}</p>
+                    <input type="hidden" name="desc" class="card-text"><strong>Description :</strong>  {{key.description}}</p>
+                    <input type="hidden" name="assign" class="card-text"><strong>Total-work-log :</strong> {{key.total_work_log}}</p>
+                    <input type="hidden" name="assign" class="card-text"><strong>Description :</strong> {{value.name}}</p>
+                    <input type="hidden" name="assign" class="card-text"><strong>Created-task-time :</strong> {{key.created_task_time}}</p>
+                    <input type="hidden" name="assign" class="card-text"><strong>Assignee name :</strong> {{key.assignee_name}}</p>
+                    <input type="hidden" name="assign" class="card-text"><strong>Priority :</strong> {{value.Priority}}</p>
                     <input type="hidden" name="id" value="{{key.id}}">
                     <input type="hidden" name="user_id" value="{{value.id}}">      
                     <del><input type="submit" class="btn btn-primary" placeholder="submit" value="Move to DONE"></del> 
                     <input type="submit" name = "submit" class="btn btn-primary" placeholder="submit" value="Move to Inprogess">
                   </div>
                 </div>
+              </div>
               </form>
                 {% endfor %}
 
