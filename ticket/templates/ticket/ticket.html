@@ -27,13 +27,21 @@
           <input type="hidden" name="assign" class="card-text"><strong>Created-task-time :</strong> {{key.created_task_time}}</p>
           <input type="hidden" name="assign" class="card-text"><strong>Assignee name :</strong> {{key.assignee_name}}</p>
           <input type="hidden" name="assign" class="card-text"><strong>Priority :</strong> {{value.Priority}}</p>
-          <input type="hidden" name="id" value="{{key.id}}">
+          <input type="hidden" name="to_do_id" value="{{key.id}}">
           <input type="hidden" name="user_id" value="{{value.id}}">
           <input type="submit" class="btn btn-primary" placeholder="submit" value="Move to Inprogess">
+        </form>
+        <br>
+        <br>
+        <form action="" method = "POST">
+          <input type="hidden" name="to_do_id" value="{{key.id}}">
+          <input type="text" name="comment" placeholder="Enter comment">
+          <input type="submit" class="btn btn-primary btn-sm" placeholder="submit" value="Add Comment">
+        </form>
         </div>
       </div>
       </div>
-    </form>
+   
       {% endfor %}
   
     </div>
@@ -58,14 +66,22 @@
                     <input type="hidden" name="assign" class="card-text"><strong>Created-task-time :</strong> {{key.created_task_time}}</p>
                     <input type="hidden" name="assign" class="card-text"><strong>Assignee name :</strong> {{key.assignee_name}}</p>
                     <input type="hidden" name="assign" class="card-text"><strong>Priority :</strong> {{value.Priority}}</p>
-                    <input type="hidden" name="id" value="{{key.id}}">
+                    <input type="hidden" name="inprogress_id" value="{{key.id}}">
                     <input type="hidden" name="user_id" value="{{value.id}}">     
                 <input type="submit" class="btn btn-primary" placeholder="submit" value="Move to DONE">
                 <input type="submit" name="submit" class="btn btn-primary" placeholder="submit" value="Move to TO-DO">               
+              </form>
+              <br>
+        <br>
+        <form action="" method = "POST">
+          <input type="hidden" name="to_do_id" value="{{key.id}}">
+          <input type="text" name="comment" placeholder="Enter comment">
+          <input type="submit" class="btn btn-primary btn-sm" placeholder="submit" value="Add Comment">
+        </form>
               </div>
             </div>
           </div>
-          </form>
+          
             {% endfor %}    
     </div>
     <div class="col-sm-4">
@@ -89,14 +105,22 @@
                     <input type="hidden" name="assign" class="card-text"><strong>Created-task-time :</strong> {{key.created_task_time}}</p>
                     <input type="hidden" name="assign" class="card-text"><strong>Assignee name :</strong> {{key.assignee_name}}</p>
                     <input type="hidden" name="assign" class="card-text"><strong>Priority :</strong> {{value.Priority}}</p>
-                    <input type="hidden" name="id" value="{{key.id}}">
+                    <input type="hidden" name="done_id" value="{{key.id}}">
                     <input type="hidden" name="user_id" value="{{value.id}}">      
                     <del><input type="submit" class="btn btn-primary" placeholder="submit" value="Move to DONE"></del> 
                     <input type="submit" name = "submit" class="btn btn-primary" placeholder="submit" value="Move to Inprogess">
+                  </form>
+                    <br>
+                    <br>
+                    <form action="" method = "POST">
+                      <input type="hidden" name="to_do_id" value="{{key.id}}">
+                      <input type="text" name="comment" placeholder="Enter comment">
+                      <input type="submit" class="btn btn-primary btn-sm" placeholder="submit" value="Add Comment">
+                    </form>
                   </div>
                 </div>
               </div>
-              </form>
+            
                 {% endfor %}
 
     </div>

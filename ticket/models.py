@@ -1,5 +1,6 @@
 
 from secrets import choice
+from xml.etree.ElementTree import Comment
 from django.db import models
 from urllib3 import Retry
 # Create your models here.
@@ -23,7 +24,6 @@ class ToDo(models.Model):
     created_task_time = models.DateTimeField(auto_now_add=True)
     update_task_time = models.DateTimeField(auto_created=True)
     Priority = models.TextField(choices= [('HIGH', 'HIGH'),('LOW','LOW'),('MEDIUM','MEDIUM')])
-
     def __str__(self):
         return self.task_name
 
@@ -50,6 +50,11 @@ class Done(models.Model):
     update_task_time = models.DateTimeField(auto_created=True)
     Priority = models.TextField(choices = [('HIGH', 'HIGH'),('LOW','LOW'),('MEDIUM','MEDIUM')])
 
+class Comment(models.Model):
+    comment = models.TextField()
+    task_id_done = models.ManyToManyField('Done')
+    task_id_inprogress = models.ManyToManyField('InProgress')
+    task_id_to_do = models.ManyToManyField('ToDo')
 
 class Sprint(models.Model):
     pass 

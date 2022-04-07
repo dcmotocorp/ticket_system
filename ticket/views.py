@@ -26,7 +26,7 @@ def move_to_inprogress(request):
         user_id = request.POST['user_id']
         user_object  = User.objects.get(id=user_id)
         if request.POST.get('submit') == "Move to Inprogess":
-            done_id =  request.POST['id']
+            done_id =  request.POST['done_id']
             done_data  = Done.objects.get(id = done_id)
             InProgress_task = InProgress.objects.create(user_id=user_object,assignee_name=done_data.assignee_name,\
                 task_name=done_data.task_name, description = done_data.description,total_work_log = done_data.total_work_log,\
@@ -34,7 +34,7 @@ def move_to_inprogress(request):
                     update_task_time = done_data.update_task_time,Priority = done_data.Priority )
             done_data.delete()
         else:
-            to_do_id =  request.POST['id']
+            to_do_id =  request.POST['to_do_id']
             task_data  = ToDo.objects.get(id = to_do_id)
             InProgress_task = InProgress.objects.create(user_id=user_object,assignee_name=task_data.assignee_name,\
                 task_name=task_data.task_name, description = task_data.description,total_work_log = task_data.total_work_log,\
@@ -42,13 +42,13 @@ def move_to_inprogress(request):
                     update_task_time = task_data.update_task_time,Priority = task_data.Priority )
             task_data.delete()
             InProgress_task.save()
-        
+
         return redirect('index')
         
 
 def move_to_done(request):
     if request.method =="POST":
-        to_do_id =  request.POST['id']
+        to_do_id =  request.POST['inprogress_id']
         task_data  = InProgress.objects.get(id = to_do_id)
         user_id = request.POST['user_id']
         user_object  = User.objects.get(id=user_id)
