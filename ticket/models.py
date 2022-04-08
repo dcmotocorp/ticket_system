@@ -1,6 +1,4 @@
 
-from secrets import choice
-from xml.etree.ElementTree import Comment
 from django.db import models
 from urllib3 import Retry
 # Create your models here.

@@ -1,9 +1,56 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from .models import ToDo, User,InProgress,Done, Comment
+from functools import wraps
 # Create your views here.
 
-def index(request):
+
+def login_decorator(function=None):
+    def decorator(view_func):
+        @wraps(view_func)
+        def f(request, *args, **kwargs):
+            if  'username' in request.session and 'password' in request.session:
+                return view_func(request, *args, **kwargs)
+            return redirect('login_page')
+        return f
+    if function is not None:
+        return decorator(function)
+    return decorator
+
+
+def login_page(request):
+    return render(request, "ticket/login_page.html")
+
+
+def login_process(request):
+    if request.method ==  "POST":
+        if  'username' not in request.session and 'password' not in request.session:
+            username = request.POST.get("username")
+            password = request.POST.get("password")
+        else:
+            username = request.session.get("username")
+            password =  request.session.get("password")
+
+        user =  User.objects.filter(name=username,password = password).first()
+        print("yeeeeee")
+        if user:
+            request.session['username'] = username
+            request.session['password'] = password
+            print("yes")
+            return redirect('index')
+        return redirect('login_page')
+    else:
+        #need to add login failed message
+        return render(request, "ticket/login_page.html")
+
+# -----------------End login -------------------#
+
+
+
+
+@login_decorator
+def index(request,user=None):
+    print("-----------dipen")
     to_do_activities =  ToDo.objects.all()
     to_do_list = []
     for to_do in to_do_activities:
@@ -20,6 +67,7 @@ def index(request):
         comment = Comment.objects.filter(task_id_inprogress=in_progress.id)
         in_progress_dict = {'in_progress_object':in_progress,'user':user,'comment':comment}
         in_progress_list.append(in_progress_dict)
+        
     
     done_tasks = Done.objects.all()
     done_task_list = []
@@ -64,7 +112,6 @@ def move_to_inprogress(request):
                 comment.save()
             task_data.delete()
             return redirect('index')
-        return redirect('index')
         
 
 def move_to_done(request):
@@ -85,7 +132,7 @@ def move_to_done(request):
                 comment.task_id_inprogress.remove(inprogress_id)
                 comment.save()
             task_data.delete()
-            return redirect('index')
+            return redirect('index' )
         else:
             done_task = Done.objects.create(user_id=user_object,assignee_name=task_data.assignee_name,\
                 task_name=task_data.task_name, description = task_data.description,total_work_log = task_data.total_work_log,\
