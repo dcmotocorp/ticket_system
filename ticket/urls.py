@@ -22,4 +22,5 @@ urlpatterns = [
 path("index/",views.index,name="index"),
 path("move_to_inprogress/",views.move_to_inprogress, name="move_to_inprogress"),
 path("move_to_done/",views.move_to_done, name="move_to_done"),
+path("create_comment/",views.create_comment, name="create_comment"),
 ]
