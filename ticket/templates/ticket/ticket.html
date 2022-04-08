@@ -11,73 +11,87 @@
     <div class="col-sm-4">
         <div class="card-header">
           TO DO</div>   
-      {% for key,value in context.items %}
+      {% for to_do in to_do_list %}
       <!-- THIS CODE IS FOR  TO DO  -->
       <form action="{% url 'move_to_inprogress' %}" method = "POST">
         {% csrf_token %}
+        
           <div class="card">
           <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-            <input type="hidden"  name="task_name" class="card-title" value="{{key.task_name}}"><strong>Task Name:</strong> {{key.task_name}}</h5><br></a>
+            <input type="hidden"  name="task_name" class="card-title" value="{{key.task_name}}"><strong>Task Name:</strong> {{to_do.to_do_object.task_name}}</h5><br></a>
            <div class="collapse" id="collapseExample">
             <div class="card-body">
-         
-          <input type="hidden" name="desc" class="card-text"><strong>Description :</strong>  {{key.description}}</p>
-          <input type="hidden" name="assign" class="card-text"><strong>Total-work-log :</strong> {{key.total_work_log}}</p>
-          <input type="hidden" name="assign" class="card-text"><strong>Description :</strong> {{value.name}}</p>
-          <input type="hidden" name="assign" class="card-text"><strong>Created-task-time :</strong> {{key.created_task_time}}</p>
-          <input type="hidden" name="assign" class="card-text"><strong>Assignee name :</strong> {{key.assignee_name}}</p>
-          <input type="hidden" name="assign" class="card-text"><strong>Priority :</strong> {{value.Priority}}</p>
-          <input type="hidden" name="to_do_id" value="{{key.id}}">
-          <input type="hidden" name="user_id" value="{{value.id}}">
+          <input type="hidden" name="desc" class="card-text"><strong>Description :</strong>  {{to_do.to_do_object.description}}</p>
+          <input type="hidden" name="assign" class="card-text"><strong>Total-work-log :</strong> {{to_do.to_do_object.total_work_log}}</p>
+          <input type="hidden" name="assign" class="card-text"><strong>Assignee name :</strong> {{to_do.user.name}}</p>
+          <input type="hidden" name="assign" class="card-text"><strong>Created-task-time :</strong> {{to_do.to_do_object.created_task_time}}</p>
+          <input type="hidden" name="assign" class="card-text"><strong>Priority :</strong> {{to_do.to_do_object.Priority}}</p>
+          <input type="hidden" name="to_do_id" value="{{to_do.to_do_object.id}}">
+          <input type="hidden" name="user_id" value="{{to_do.user.id}}">
           <input type="submit" class="btn btn-primary" placeholder="submit" value="Move to Inprogess">
         </form>
         <br>
         <br>
-        <form action="" method = "POST">
-          <input type="hidden" name="to_do_id" value="{{key.id}}">
+        <form action="{% url 'create_comment' %}" method = "POST">
+          {% csrf_token %}
+          <input type="hidden" name="to_id" value="{{to_do.to_do_object.id}}">
+          <input type="hidden" name="user_id" value="{{to_do.user.id}}">
           <input type="text" name="comment" placeholder="Enter comment">
           <input type="submit" class="btn btn-primary btn-sm" placeholder="submit" value="Add Comment">
-        </form>
-        </div>
+        </form> 
+
+       
+        <input type="hidden" class="card-text"><strong>comments :</strong><br>
+        {% for index in to_do.comment %} 
+      {{ forloop.counter }} {{index.comment}}</p>
+        {% endfor %}  
       </div>
       </div>
-   
+      </div>
       {% endfor %}
-  
     </div>
+
+    
     <div class="col-sm-4">
         <div class="card-header">
             IN PROGRESS
           </div>
-            {% for key,value in context_inprogress.items %}
+          {% for in_progress in in_progress_list %}
+
       <!-- THIS CODE IS FOR IN-PROGRESS  -->
 
             <form action="{% url 'move_to_done' %}" method = "POST">
               {% csrf_token %}
                 <div class="card">
                   <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample">
-                    <input type="hidden"  name="task_name" class="card-title" value="{{key.task_name}}">Task : {{key.task_name}}</h5>
+                    <input type="hidden"  name="task_name" class="card-title" value="{{key.task_name}}">Task : {{in_progress.in_progress_object.task_name}}</h5>
                   </a>
                 <div class="collapse" id="collapseExample1">
                   <div class="card-body">
-                    <input type="hidden" name="desc" class="card-text"><strong>Description :</strong>  {{key.description}}</p>
-                    <input type="hidden" name="assign" class="card-text"><strong>Total-work-log :</strong> {{key.total_work_log}}</p>
-                    <input type="hidden" name="assign" class="card-text"><strong>Description :</strong> {{value.name}}</p>
-                    <input type="hidden" name="assign" class="card-text"><strong>Created-task-time :</strong> {{key.created_task_time}}</p>
-                    <input type="hidden" name="assign" class="card-text"><strong>Assignee name :</strong> {{key.assignee_name}}</p>
-                    <input type="hidden" name="assign" class="card-text"><strong>Priority :</strong> {{value.Priority}}</p>
-                    <input type="hidden" name="inprogress_id" value="{{key.id}}">
-                    <input type="hidden" name="user_id" value="{{value.id}}">     
+                    <input type="hidden" name="desc" class="card-text"><strong>Description :</strong>  {{in_progress.in_progress_object.description}}</p>
+                    <input type="hidden" name="assign" class="card-text"><strong>Total-work-log :</strong> {{in_progress.in_progress_object.total_work_log}}</p>
+                    <input type="hidden" name="assign" class="card-text"><strong>Description :</strong> {{in_progress.user.name}}</p>
+                    <input type="hidden" name="assign" class="card-text"><strong>Created-task-time :</strong> {{in_progress.in_progress_object.created_task_time}}</p>
+                    <input type="hidden" name="assign" class="card-text"><strong>Assignee name :</strong> {{in_progress.in_progress_object.assignee_name}}</p>
+                    <input type="hidden" name="assign" class="card-text"><strong>Priority :</strong> {{in_progress.in_progress_object.Priority}}</p>
+                    <input type="hidden" name="inprogress_id" value="{{in_progress.in_progress_object.id}}">
+                    <input type="hidden" name="user_id" value="{{in_progress.user.id}}">     
                 <input type="submit" class="btn btn-primary" placeholder="submit" value="Move to DONE">
                 <input type="submit" name="submit" class="btn btn-primary" placeholder="submit" value="Move to TO-DO">               
               </form>
+              
               <br>
         <br>
-        <form action="" method = "POST">
-          <input type="hidden" name="to_do_id" value="{{key.id}}">
+        <form action="{% url 'create_comment' %}" method = "POST">
+          {% csrf_token %}
+          <input type="hidden" name="inprogress_id" value="{{in_progress.in_progress_object.id}}">
           <input type="text" name="comment" placeholder="Enter comment">
           <input type="submit" class="btn btn-primary btn-sm" placeholder="submit" value="Add Comment">
         </form>
+        <input type="hidden" class="card-text"><strong>comments :</strong><br>
+        {% for index in in_progress.comment %} 
+      {{ forloop.counter }} {{index.comment}}</p>
+        {% endfor %} 
               </div>
             </div>
           </div>
@@ -88,35 +102,39 @@
         <div class="card-header">
             DONE
           </div>
-          {% for key,value in done_task_list.items %}
+          {% for done_task in done_task_list %}
           <!-- THIS CODE IS FOR IN-PROGRESS  -->
     
                 <form action="{% url 'move_to_inprogress'  %}" method = "POST">
                   {% csrf_token %}
                     <div class="card">
                       <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample">
-                        <input type="hidden"  name="task_name" class="card-title" value="{{key.task_name}}">Task : {{key.task_name}}</h5>
+                        <input type="hidden"  name="task_name" class="card-title" value="{{key.task_name}}">Task : {{done_task.done_task_list.task_name}}</h5>
                       </a>
                     <div class="collapse" id="collapseExample1">
                   <div class="card-body">
-                    <input type="hidden" name="desc" class="card-text"><strong>Description :</strong>  {{key.description}}</p>
-                    <input type="hidden" name="assign" class="card-text"><strong>Total-work-log :</strong> {{key.total_work_log}}</p>
-                    <input type="hidden" name="assign" class="card-text"><strong>Description :</strong> {{value.name}}</p>
-                    <input type="hidden" name="assign" class="card-text"><strong>Created-task-time :</strong> {{key.created_task_time}}</p>
-                    <input type="hidden" name="assign" class="card-text"><strong>Assignee name :</strong> {{key.assignee_name}}</p>
-                    <input type="hidden" name="assign" class="card-text"><strong>Priority :</strong> {{value.Priority}}</p>
-                    <input type="hidden" name="done_id" value="{{key.id}}">
-                    <input type="hidden" name="user_id" value="{{value.id}}">      
-                    <del><input type="submit" class="btn btn-primary" placeholder="submit" value="Move to DONE"></del> 
+                    <input type="hidden" name="desc" class="card-text"><strong>Description :</strong>  {{done_task.done_task_list.description}}</p>
+                    <input type="hidden" name="assign" class="card-text"><strong>Total-work-log :</strong> {{done_task.done_task_list.total_work_log}}</p>
+                    <input type="hidden" name="assign" class="card-text"><strong>Description :</strong> {{done_task.user.name}}</p>
+                    <input type="hidden" name="assign" class="card-text"><strong>Created-task-time :</strong> {{done_task.done_task_list.created_task_time}}</p>
+                    <input type="hidden" name="assign" class="card-text"><strong>Assignee name :</strong> {{done_task.done_task_list.assignee_name}}</p>
+                    <input type="hidden" name="assign" class="card-text"><strong>Priority :</strong> {{done_task.done_task_list.Priority}}</p>
+                    <input type="hidden" name="done_id" value="{{done_task.done_task_list.id}}">
+                    <input type="hidden" name="user_id" value="{{done_task.user.id}}">       
                     <input type="submit" name = "submit" class="btn btn-primary" placeholder="submit" value="Move to Inprogess">
                   </form>
                     <br>
                     <br>
-                    <form action="" method = "POST">
-                      <input type="hidden" name="to_do_id" value="{{key.id}}">
+                    <form action="{% url 'create_comment' %}" method = "POST">
+                      {% csrf_token %}
+                      <input type="hidden" name="done_id" value="{{done_task.done_task_list.id}}">
                       <input type="text" name="comment" placeholder="Enter comment">
                       <input type="submit" class="btn btn-primary btn-sm" placeholder="submit" value="Add Comment">
                     </form>
+                    <input type="hidden" class="card-text"><strong>comments :</strong><br>
+        {% for index in done_task.comment %} 
+      {{ forloop.counter }} {{index.comment}}</p>
+        {% endfor %} 
                   </div>
                 </div>
               </div>
