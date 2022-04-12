@@ -1,15 +1,29 @@
+from datetime import datetime
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
-from .models import ToDo, User,InProgress,Done, Comment
+from .models import Admin, ToDo, User,InProgress,Done, Comment
 from functools import wraps
 # Create your views here.
+
+def registration(request):
+    if request.method == "POST":
+        if request.POST.get("role") == "admin":
+            admin_object  = Admin.objects.create(name=request.POST.get("username"),password = request.POST.get("password"),role =request.POST.get("role") ) 
+            admin_object.save()
+            return render(request, "ticket/login_page.html")
+        if request.POST.get("role") == "user":
+            user_object  = User.objects.create(name=request.POST.get("username"),password = request.POST.get("password"),role =request.POST.get("role") ) 
+            user_object.save()
+            return render(request, "ticket/login_page.html")
+    return render(request, "ticket/registration.html") 
+
 
 
 def login_decorator(function=None):
     def decorator(view_func):
         @wraps(view_func)
         def f(request, *args, **kwargs):
-            if  'username' in request.session and 'password' in request.session:
+            if  'username' in request.session and 'password' in request.session and 'role' in request.session:
                 return view_func(request, *args, **kwargs)
             return redirect('login_page')
         return f
@@ -27,17 +41,29 @@ def login_process(request):
         if  'username' not in request.session and 'password' not in request.session:
             username = request.POST.get("username")
             password = request.POST.get("password")
+            role = request.POST.get("role")
         else:
             username = request.session.get("username")
             password =  request.session.get("password")
+            role    = request.session.get("role")
 
-        user =  User.objects.filter(name=username,password = password).first()
-        print("yeeeeee")
-        if user:
-            request.session['username'] = username
-            request.session['password'] = password
-            print("yes")
-            return redirect('index')
+        if role == "admin":
+            admin = Admin.objects.filter(name=username,password = password).first()  
+            if admin : 
+                request.session['username'] = username
+                request.session['password'] = password
+                request.session['role'] = admin.role
+                return redirect('get_task')
+                
+
+        if role == "user":
+            user =  User.objects.filter(name=username,password = password).first()
+            if user:
+                request.session['username'] = username
+                request.session['password'] = password
+                request.session['role'] = user.role
+                return redirect('index')
+        
         return redirect('login_page')
     else:
         #need to add login failed message
@@ -45,8 +71,10 @@ def login_process(request):
 
 # -----------------End login -------------------#
 
-
-
+def logout(request):
+    del request.session['username'] 
+    del request.session['password'] 
+    return redirect('login_page')
 
 @login_decorator
 def index(request,user=None):
@@ -171,5 +199,36 @@ def create_comment(request):
             return redirect('index')
         
 
+def get_task(request):
+    users = User.objects.all()
+    to_do_task  = ToDo.objects.all()
+    in_progress_task = InProgress.objects.all()
+    done_task = Done.objects.all()
+    return render(request,"ticket/admin.html",{'users':users,'to_do_task':to_do_task,'in_progress':in_progress_task,'done_task':done_task})
 
- 
+def create_to_do_task(request):
+    user = User.objects.get(id = request.POST.get("assign"))
+    to_do_task = ToDo.objects.create(user_id = user,assignee_name=user.name,\
+            task_name=request.POST.get("task_name"), description = request.POST.get("desc"),total_work_log = request.POST.get("work_log"),\
+                 updated_worklog = 0,created_task_time = request.POST.get("datetime"),
+                 update_task_time =datetime.now(),Priority = request.POST.get("priority") )
+    to_do_task.save()
+    return redirect('get_task')
+
+def delete_task(request):
+    if request.POST.get("task_id"):
+        task_id = request.POST.get("task_id")
+        user = ToDo.objects.filter(id=task_id).first()
+        if not user :
+            user = InProgress.objects.filter(id=task_id).first()
+        user = user
+        if not user :
+            user = Done.objects.filter(id=task_id).first()
+        user.delete()   
+    if request.POST.get("user_id"):
+        user = User.objects.get(id=request.POST.get("user_id"))
+        user.delete()
+    return redirect('get_task') 
+
+            
+

@@ -82,14 +82,14 @@
 
 <div class="sidenav">
          <div class="login-main-text">
-            <h2>Application<br> Login Page</h2>
-            <p>Login from here to access.</p>
+            <h2>Application<br> Register Page</h2>
+            <p>Register from here to access.</p>
          </div>
       </div>
       <div class="main">
          <div class="col-md-6 col-sm-12">
             <div class="login-form">
-               <form action="{% url 'login_process' %}" method="post">
+               <form action="{% url 'registration' %}" method="post">
                    {% csrf_token %}
                   <div class="form-group">
                      <label>User Name</label>
@@ -99,15 +99,11 @@
                      <label>Password</label>
                      <input type="password" name="password" class="form-control" placeholder="Password">
                   </div>
-                  <div class="form-group">
-
-                  
                   <select class="form-select" name ="role" aria-label="role">
                     <option selected>select role</option>
                     <option value="admin">Admin</option>
                     <option value="user">User</option>
                   </select>
-                </div>
                   <button type="submit" class="btn btn-black">Login</button>
                </form>
             </div>
